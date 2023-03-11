@@ -63,4 +63,16 @@ class ProductRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function getAllProductNames(): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p.id, p.name');
+
+        $query = $qb->getQuery();
+
+        $result = $query->getResult();
+
+        return array_column($result, 'id', 'name');
+    }
 }

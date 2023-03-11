@@ -78,4 +78,11 @@ class Country
 
         return $this;
     }
+
+    public function checkTIN(string $tin): bool
+    {
+        $pattern = '/^'.$this->getCode().$this->getTinPattern().'$/';
+
+        return preg_match($pattern, $tin);
+    }
 }

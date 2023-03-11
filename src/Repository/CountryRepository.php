@@ -39,28 +39,20 @@ class CountryRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Country[] Returns an array of Country objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByTINOrNull(string $tin): Country|null
+    {
+        $codeFromTIN = substr($tin, 0, 2);
 
-//    public function findOneBySomeField($value): ?Country
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        $country = $this->findOneBy(['code' => $codeFromTIN]);
+
+        if (!$country) {
+            return null;
+        }
+
+        if (!$country->checkTIN($tin)) {
+            return null;
+        }
+
+        return $country;
+    }
 }
